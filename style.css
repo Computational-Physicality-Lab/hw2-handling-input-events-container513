@@ -1,0 +1,323 @@
+/* Your Code Here */
+body{
+    margin: 0pt;
+}
+header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.header_bar{
+    background-color: #c51230;
+    width: 100%;
+    height: 20pt;
+}
+.logo{
+    margin-left: 0pt;
+    margin-right: 25pt;
+    scale: 60%;
+}
+.logo:hover{
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform:scale(1.1);
+    transition: 0.5s ease;
+}
+.title{
+    margin-left: 0pt;
+    margin-right: 0pt;
+    font-family: 'Catamaran';
+    font-size: 2.2rem;
+    position: relative;
+
+}
+.shopping_car{
+    margin-left: 25pt;
+    margin-right: 50pt;
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    height: 60px;
+    background-color: #ac2432;
+    border-radius: 8px;
+    margin-left: 70px;
+    
+}
+.shopping_car a{
+    display: flex;
+    width:auto;
+    height:auto;
+    text-decoration: none;
+}
+.shopping_car a:hover{
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform:scale(1.1);
+    transition: 0.5s ease;
+}
+.shopping_car img{
+    width: auto;
+    height: auto;
+    padding: 5pt;
+    padding-left: 0;
+    padding-right: 5;
+    filter: invert();
+}
+.shopping_car div{
+    position: relative;
+    margin: 0pt;
+    font-size: 2rem;
+    display: block;
+    top: 8pt;
+    color:white;
+}
+.navitem_text{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    font-family: 'Open Sans';
+    font-size:1rem;
+}
+.navitem_link{
+    color:#c51230;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+}
+.navitem_link:hover{
+    border-bottom:3px solid #ac2432;
+    transition: 0.5s ease;
+}
+.navitem{
+    list-style-type: none;
+    display:flex;
+    justify-content: center;
+}
+.home_img{
+    position:relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.home_img img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.content{
+    display: flex;
+    justify-content: center;
+}
+.content_block{
+    width: 40%;
+    border: #c51230;
+    border-style: solid;
+    border-width:thick;
+    border-radius: 8pt;
+    margin: 25pt;
+}
+.content_head{
+    color: #c51230;
+    font-family: 'Open Sans';
+    margin: 15pt;
+    margin-top: 25pt;
+    font-size: x-large;
+}
+.content_body{
+    margin:15pt;
+    color:gray;
+    font-family: 'Open Sans';
+}
+footer{
+    background-color: #c51230;
+    display: flex;
+    justify-content:center;
+    margin-top: 10pt;
+}
+.footer_link{
+    font-family: 'Open Sans';
+    color:white;
+    text-decoration: none;
+    margin: 20pt;
+    margin-right:30pt;
+    margin-left:30pt;
+    border-bottom: 3px solid transparent;
+}
+.footer_text{
+    font-family: 'Open Sans';
+    color:white;
+    text-decoration: none;
+    margin: 20pt;
+    margin-right:30pt;
+    margin-left:30pt;
+}
+.footer_link:hover{
+    border-bottom: 3px solid white;
+    transition: 0.5s ease;
+}
+.not_implemented_img{
+    position:relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.not_implemented_img img{
+    display: block;
+    opacity:0.5;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+.not_implemented_text{
+    margin:20pt;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: large;
+    color: gray;
+    text-align: center;
+}
+.product_title{
+    font-size:xx-large;
+    font-family: 'Catamaran';
+    margin-left:60pt;
+    margin-bottom: 20pt;
+}
+.shirt_list{
+    display:flex;
+    flex-wrap:wrap;
+    width:80%;
+    margin:auto;
+    column-gap: 20pt;
+    /* align-items: flex-start; */
+}
+.shirt{
+    width: 30%;
+    border-style: solid;
+    border-color:#c51230;
+    border-radius: 10pt;
+    overflow: hidden;
+    margin-bottom: 30pt;
+}
+.shirt img{
+    width:100%;
+    height: auto;
+}
+.shirt img:hover{
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform:scale(1.1);
+    transition: 0.5s ease;
+    color: white;
+}
+.shirt_name{
+    color: #c51230;
+    font-family: 'Open Sans';
+    margin: 15pt;
+    font-size: x-large;
+}
+.shirt_des{
+    color: gray;
+    font-family: 'Open Sans';
+    margin: 15pt;
+    margin-bottom: 10pt;
+    font-size: medium;
+}
+.shirt button{
+    border:none;
+    border-radius: 5pt;
+    background-color:#ac2432;
+    font-family: 'Open Sans';
+    color: white;
+    width: 30%;
+    height: 8%;
+    margin:20pt;
+    margin-top: 10pt;
+    margin-bottom: 30pt;
+}
+.shirt button:hover{
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform:scale(1.1);
+    transition: 0.5s ease;
+}
+.product_name{
+    font-size:xx-large;
+    font-family: 'Catamaran';
+    margin-left:60pt;
+    margin-bottom: 20pt;
+}
+.product{
+    display:flex;
+    flex-wrap:wrap;
+    width:80%;
+    margin:auto;
+    column-gap: 20pt;
+}
+.product img{
+    width:30%;
+}
+.product_content{
+    width:60%;
+}
+.product_prices{
+    color:#ac2432;
+    font-family: "Open Sans";
+    font-size: x-large;
+}
+.product_description{
+    margin-top: 10pt;
+    color:#ac2432;
+    font-family: "Open Sans";
+    font-size: small;
+}
+.product_side{
+    font-family: "Open Sans";
+    color: gray;
+    font-size: small;
+    margin: 10pt;
+    display: flex;
+    align-items: center;
+}
+.product_color{
+    font-family: "Open Sans";
+    color: gray;
+    font-size: small;
+    margin: 10pt;
+    display: flex;
+    align-items: center;
+}
+.sides_button{
+    border:none;
+    border-radius: 2pt;
+    background-color:#ac2432;
+    font-family: 'Open Sans';
+    color: white;
+    width: 40pt;
+    height: 20pt;
+    margin-left: 10pt;
+    display: inline-block;
+}
+.sides_button:hover{
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform:scale(1.1);
+    transition: 0.5s ease;
+}
+.colors_button{
+    border-radius: 2pt;
+    border: 1pt solid #ac2432;
+    font-family: 'Open Sans';
+    color: black;
+    width: 40pt;
+    height: 20pt;
+    margin-left: 10pt;
+    display: inline-block;
+}
+.colors_button:hover{
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform:scale(1.1);
+    transition: 0.5s ease;
+    color: white;
+}
