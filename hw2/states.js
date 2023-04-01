@@ -113,6 +113,7 @@ class Context{
         this.mouseDownEvent = null;
     }
     doEvent(event){
+        console.log(event.type);
         this.currentState.doEvent(event);
     }
     setState(state){
