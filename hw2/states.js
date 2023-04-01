@@ -25,6 +25,7 @@ class IdleState extends State{
         }
         
         if(event.type == "touchstart" && event.target.className == "target"){
+            this.context.settouchStartEvent(event);
             this.context.setState(this.context.touchStartState);
         }
     }
@@ -78,8 +79,13 @@ class TouchStartState extends State{
         super(context);
     }
     doEvent(event){
-        if(event.type == "touchstart"){
-            this.context.setState(this.context.touchStartState);
+        if(event.type == "touchend"){
+            this.context.setTarget(this.touchStartEvent.target);
+            this.context.settouchStartEvent(null);
+            this.context.setState(this.context.idleState);
+        }
+        if(event.type == "touchmove"){
+            this.context.setState(this.context.touchMoveState);
         }
     }
 }
@@ -111,6 +117,7 @@ class Context{
         this.currentTarget = null;
         this.currentState = this.idleState;
         this.mouseDownEvent = null;
+        this.touchStartEvent = null;
     }
     doEvent(event){
         console.log(event.type);
@@ -121,6 +128,9 @@ class Context{
     }
     setmouseDownEvent(event){
         this.mouseDownEvent = event;
+    }
+    settouchStartEvent(event){
+        this.touchStartEvent = event;
     }
     setTarget(target){
         if(this.currentTarget!=null){
