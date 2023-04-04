@@ -36,9 +36,9 @@ class IdleState extends State{
             this.context.settouchStartEvent(null);
             
             this.touchStartPreviousTime = event.timeStamp;
-            console.log(this.touchStartPreviousTime);
             this.context.setState(this.context.touchStartState);
         }
+        
     }
 }
 class MouseDownState extends State{
@@ -117,10 +117,19 @@ class TouchStartState extends State{
     constructor(context){
         super(context);
         this.touchStartPreviousTime = -1000;
+        this.touchScalePeriod = 300;
     }
     doEvent(event){
-        if(event.touches.length >= 2){
-            this.context.setState(this.context.idleState);
+        if(event.touches.length == 2 && Math.abs(event.touches[1].timeStamp - event.touches[0].timeStamp) < this.touchScalePeriod){
+            if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) > 
+            Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
+                this.context.touchHScaleState.setWidth(this.context.target.offsetWidth,Math.abs(event.touches[1].clientX-event.touches[0].clientX));
+                this.context.setState(this.context.touchHScaleState);
+            }
+            else{
+                this.context.setState(this.context.touchVScaleState);
+            }
+            return;
         }
         if(this.context.touchStartEvent==null){
             if(event.type == "touchend" &&
@@ -170,6 +179,7 @@ class TouchMoveState extends State{
             this.context.touchStartEvent.target.style.left = this.resumeLeft;
             this.context.touchStartEvent.target.style.top = this.resumeTop;
             this.context.setState(this.context.idleState);
+            return;
         }
         if(event.type == "touchmove" && event.touches.length == 1){
             var x = event.touches[0].clientX;
@@ -245,6 +255,38 @@ class TouchFollowState extends State{
     }
 }
 
+class TouchHScaleState extends State{
+    constructor(context){
+        super(context);
+        this.resumeWidth = null;
+        this.touchWidth = null;
+    }
+
+    setWidth(w,ww){
+        this.resumeWidth = w;
+        this.touchWidth = ww;
+    }
+
+    doEvent(event){
+        if(event.touches.length >= 3){
+            this.context.currentTarget.offsetWidth = this.resumeWidth;
+            this.context.setState(this.context.idleState);
+            return;
+        }
+        if(event.type == "keydown"){
+            if(event.key=="Escape"){
+                this.context.currentTarget.offsetWidth = this.resumeWidth;
+                this.context.setState(this.context.idleState);
+                return;
+            }
+        }
+        if(event.touches.length == 2){
+            let d = Math.abs(event.touches[0].clientX-event.touches[1].clientX);
+            this.context.currentTarget.offsetWidth = this.resumeWidth + (d - this.touchWidth);
+        }
+    }
+}
+
 
 class Context{
     constructor() {
@@ -256,6 +298,7 @@ class Context{
         this.touchStartState = new TouchStartState(this);
         this.clickIdleState = new ClickIdleState(this);
         this.touchFollowState = new TouchFollowState(this);
+        this.touchScaleState = new TouchHScaleState(this);
         this.currentState = this.idleState;
         this.currentTarget = null;
         this.mouseDownEvent = null;
@@ -265,8 +308,7 @@ class Context{
         this.touchPeriod = 500;
     }
     doEvent(event){
-        console.log(event.type);
-        console.log(this.currentState);
+        console.log(event);
         this.currentState.doEvent(event);
     }
     setState(state){
