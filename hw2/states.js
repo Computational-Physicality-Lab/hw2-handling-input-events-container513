@@ -120,9 +120,11 @@ class TouchStartState extends State{
         this.touchScalePeriod = 300;
     }
     doEvent(event){
+        console.log("touchStart");
         if(event.touches.length == 2 && Math.abs(event.touches[1].timeStamp - event.touches[0].timeStamp) < this.touchScalePeriod){
             if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) > 
             Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
+                console.log("Hscale");
                 this.context.touchHScaleState.setWidth(this.context.target.offsetWidth,Math.abs(event.touches[1].clientX-event.touches[0].clientX));
                 this.context.setState(this.context.touchHScaleState);
             }
@@ -268,6 +270,7 @@ class TouchHScaleState extends State{
     }
 
     doEvent(event){
+        console.log("good!");
         if(event.touches.length >= 3){
             this.context.currentTarget.offsetWidth = this.resumeWidth;
             this.context.setState(this.context.idleState);
@@ -281,7 +284,7 @@ class TouchHScaleState extends State{
             }
         }
         if(event.touches.length == 2){
-            console.log("yes");
+            console.log("scale");
             let d = Math.abs(event.touches[0].clientX-event.touches[1].clientX);
             this.context.currentTarget.offsetWidth = this.resumeWidth + (d - this.touchWidth);
         }
@@ -309,7 +312,6 @@ class Context{
         this.touchPeriod = 500;
     }
     doEvent(event){
-        console.log(event);
         this.currentState.doEvent(event);
     }
     setState(state){
