@@ -306,7 +306,7 @@ class Context{
         this.touchStartState = new TouchStartState(this);
         this.clickIdleState = new ClickIdleState(this);
         this.touchFollowState = new TouchFollowState(this);
-        this.touchScaleState = new TouchHScaleState(this);
+        this.touchHScaleState = new TouchHScaleState(this);
         this.currentState = this.idleState;
         this.currentTarget = null;
         this.mouseDownEvent = null;
