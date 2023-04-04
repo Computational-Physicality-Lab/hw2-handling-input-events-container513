@@ -41,8 +41,12 @@ class IdleState extends State {
         }
         if (event.type == "devicemotion" && event.acceleration.x > 10) {
             let clone = document.createElement("div");
-            clone = this.context.currentTarget;
+            clone.style.width = 100+"px";
+            clone.style.height = 100+"px";
+            clone.style.backgroundColor = 'pink';
+            
             clone.style.left = 0;
+            clone.style.top = 0;
             let w = document.getElementById("workspace");
             w.appendChild(clone);
         }
