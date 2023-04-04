@@ -1,206 +1,213 @@
-class State{
-    constructor(context){
+class State {
+    constructor(context) {
         this.context = context;
     }
-    doEvent(event){}
+    doEvent(event) { }
 }
 
-class IdleState extends State{
-    constructor(context){
+class IdleState extends State {
+    constructor(context) {
         super(context);
         this.touchStartPreviousTime = -1000;
         this.touchPeriod = 200;
     }
 
-    doEvent(event){
-        if(event.type == "mousedown" && event.target.className=="target"){
+    doEvent(event) {
+        if (event.type == "mousedown" && event.target.className == "target") {
             this.context.setmouseDownEvent(event);
             this.context.setState(this.context.mouseDownState);
         }
 
-        if(event.type == "click" && event.target.id=="workspace"){
+        if (event.type == "click" && event.target.id == "workspace") {
             this.context.setTarget(null);
         }
 
-        if(event.type == "dblclick" && event.target.className == "target"){
+        if (event.type == "dblclick" && event.target.className == "target") {
             this.context.setmouseDownEvent(event);
             this.context.setState(this.context.mouseDblclickState);
         }
-        
-        if(event.type == "touchstart" && event.target.className == "target" && event.touches.length == 1){
+
+        if (event.type == "touchstart" && event.target.className == "target" && event.touches.length == 1) {
             this.context.settouchStartEvent(event.touches[0]);
             this.touchStartPreviousTime = event.timeStamp;
             this.context.setState(this.context.touchStartState);
         }
 
-        if(event.type == "touchstart" && event.target.id == "workspace" && event.touches.length == 1){
+        if (event.type == "touchstart" && event.target.id == "workspace" && event.touches.length == 1) {
             this.context.settouchStartEvent(null);
-            
+
             this.touchStartPreviousTime = event.timeStamp;
             this.context.setState(this.context.touchStartState);
         }
-        
+        if (event.type == "devicemotion" && event.acceleration.x > 10) {
+            let clone = document.createElement("div");
+            clone = this.context.currentTarget;
+            clone.style.left = 0;
+        }
+
     }
 }
-class MouseDownState extends State{
-    constructor(context){
+class MouseDownState extends State {
+    constructor(context) {
         super(context);
     }
-    doEvent(event){
-        if(event.type == "click" && event.target==this.context.mouseDownEvent.target){
+    doEvent(event) {
+        if (event.type == "click" && event.target == this.context.mouseDownEvent.target) {
             this.context.setTarget(event.target);
             this.context.setmouseDownEvent(null);
             this.context.setState(this.context.idleState);
         }
-        if(event.type == "mousemove" && event.target==this.context.mouseDownEvent.target){
+        if (event.type == "mousemove" && event.target == this.context.mouseDownEvent.target) {
             this.context.mouseMoveState.setResumeLeftandTop(event.target.style.left, event.target.style.top);
             this.context.setState(this.context.mouseMoveState);
         }
     }
 }
-class MouseMoveState extends State{
-    constructor(context){
+class MouseMoveState extends State {
+    constructor(context) {
         super(context);
         this.resumeLeft = null;
         this.resumeTop = null;
     }
 
-    setResumeLeftandTop(left,top){
+    setResumeLeftandTop(left, top) {
         this.resumeLeft = left;
         this.resumeTop = top;
     }
 
-    doEvent(event){
-        if(event.type == "mousemove"){
+    doEvent(event) {
+        if (event.type == "mousemove") {
             var x = event.clientX;
             var y = event.clientY;
             var newx = x - this.context.mouseDownEvent.offsetX;
-            var newy = y - this.context.mouseDownEvent.offsetY; 
-            this.context.mouseDownEvent.target.style.left = newx+"px";
-            this.context.mouseDownEvent.target.style.top = newy+"px";
+            var newy = y - this.context.mouseDownEvent.offsetY;
+            this.context.mouseDownEvent.target.style.left = newx + "px";
+            this.context.mouseDownEvent.target.style.top = newy + "px";
         }
-        if(event.type == "keydown"){
-            if(event.key=="Escape"){
+        if (event.type == "keydown") {
+            if (event.key == "Escape") {
                 this.context.mouseDownEvent.target.style.left = this.resumeLeft;
                 this.context.mouseDownEvent.target.style.top = this.resumeTop;
                 this.context.setState(this.context.clickIdleState);
             }
         }
-        if(event.type == "click"){
+        if (event.type == "click") {
             this.context.setState(this.context.idleState);
         }
     }
 }
 
-class ClickIdleState extends State{
-    constructor(context){
+class ClickIdleState extends State {
+    constructor(context) {
         super(context);
     }
-    doEvent(event){
-        if(event.type == "click"){
+    doEvent(event) {
+        if (event.type == "click") {
             this.context.setState(this.context.idleState);
         }
     }
 }
 
-class MouseDblclickState extends State{
-    constructor(context){
+class MouseDblclickState extends State {
+    constructor(context) {
         super(context);
     }
-    doEvent(event){
-        if(event.type == "mousemove"){
+    doEvent(event) {
+        if (event.type == "mousemove") {
             this.context.setState(this.context.mouseMoveState);
         }
     }
 }
 
-class TouchStartState extends State{
-    constructor(context){
+class TouchStartState extends State {
+    constructor(context) {
         super(context);
         this.touchStartPreviousTime = -1000;
         this.touchScalePeriod = 300;
     }
-    doEvent(event){
+    doEvent(event) {
         console.log("touchStart");
         console.log(event.touches.length);
         console.log(event);
-        if(event.touches.length == 2 && event.type=="touchstart" && Math.abs(event.timeStamp - this.context.idleState.touchStartPreviousTime) < this.touchScalePeriod){
-            if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) > 
-            Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
+        if (event.touches.length == 2 && event.type == "touchstart" && Math.abs(event.timeStamp - this.context.idleState.touchStartPreviousTime) < this.touchScalePeriod) {
+            if (Math.abs(event.touches[1].clientX - event.touches[0].clientX) >
+                Math.abs(event.touches[1].clientY - event.touches[0].clientY)) {
                 console.log("Hscale");
-                this.context.touchHScaleState.setWidth(this.context.target.offsetWidth,Math.abs(event.touches[1].clientX-event.touches[0].clientX));
+                console.log(this.context.currentTarget)
+                this.context.touchHScaleState.setWidth(this.context.currentTarget.offsetWidth, Math.abs(event.touches[1].clientX - event.touches[0].clientX));
                 this.context.setState(this.context.touchHScaleState);
             }
-            else{
+            else {
                 console.log("Vscale");
+                this.context.touchVScaleState.setHeight(this.context.currentTarget.offsetHeight, Math.abs(event.touches[1].clientY - event.touches[0].clientY));
                 this.context.setState(this.context.touchVScaleState);
             }
             return;
         }
-        if(this.context.touchStartEvent==null){
-            if(event.type == "touchend" &&
-            event.timeStamp - this.context.idleState.touchStartPreviousTime <= this.context.idleState.touchPeriod
-                && event.target.id == "workspace"){
-                    this.context.setTarget(null);
-                }
+        if (this.context.touchStartEvent == null) {
+            if (event.type == "touchend" &&
+                event.timeStamp - this.context.idleState.touchStartPreviousTime <= this.context.idleState.touchPeriod
+                && event.target.id == "workspace") {
+                this.context.setTarget(null);
+            }
             this.context.setState(this.context.idleState);
             return;
         }
-        if(event.type == "touchend"){
+        if (event.type == "touchend") {
             this.context.setTarget(this.context.touchStartEvent.target);
-            if(event.timeStamp - this.context.touchPeriousTime <= this.context.touchPeriod
-                && event.target == this.context.touchPeriousTarget){
-                this.context.touchFollowState.setResumeLeftandTop(this.context.touchStartEvent.target.style.left,this.context.touchStartEvent.target.style.top);
-                console.log(this.context.touchStartEvent.target.style.left,this.context.touchStartEvent.target.style.top);
+            if (event.timeStamp - this.context.touchPeriousTime <= this.context.touchPeriod
+                && event.target == this.context.touchPeriousTarget) {
+                this.context.touchFollowState.setResumeLeftandTop(this.context.touchStartEvent.target.style.left, this.context.touchStartEvent.target.style.top);
+                console.log(this.context.touchStartEvent.target.style.left, this.context.touchStartEvent.target.style.top);
                 this.context.setState(this.context.touchFollowState);
             }
-            else{
+            else {
                 this.context.settouchStartEvent(null);
                 this.context.setPeriousTouch(event.timeStamp, event.target);
                 this.context.setState(this.context.idleState);
             }
         }
-        if(event.type == "touchmove"){
-            this.context.touchMoveState.setResumeLeftandTop(event.touches[0].target.style.left,event.touches[0].target.style.top);
+        if (event.type == "touchmove") {
+            this.context.touchMoveState.setResumeLeftandTop(event.touches[0].target.style.left, event.touches[0].target.style.top);
             this.context.setState(this.context.touchMoveState);
         }
-         
+
     }
 }
 
-class TouchMoveState extends State{
-    constructor(context){
+class TouchMoveState extends State {
+    constructor(context) {
         super(context);
         this.resumeLeft = null;
         this.resumeTop = null;
     }
 
-    setResumeLeftandTop(left,top){
+    setResumeLeftandTop(left, top) {
         this.resumeLeft = left;
         this.resumeTop = top;
     }
 
-    doEvent(event){
-        if(event.touches.length >= 2){
+    doEvent(event) {
+        if (event.touches.length >= 2) {
             this.context.touchStartEvent.target.style.left = this.resumeLeft;
             this.context.touchStartEvent.target.style.top = this.resumeTop;
             this.context.setState(this.context.idleState);
             return;
         }
-        if(event.type == "touchmove" && event.touches.length == 1){
+        if (event.type == "touchmove" && event.touches.length == 1) {
             var x = event.touches[0].clientX;
             var y = event.touches[0].clientY;
-            var newx = x - this.context.touchStartEvent.target.offsetWidth/2;
-            var newy = y - this.context.touchStartEvent.target.offsetHeight/2;
-            this.context.touchStartEvent.target.style.left = newx+"px";
-            this.context.touchStartEvent.target.style.top = newy+"px";
+            var newx = x - this.context.touchStartEvent.target.offsetWidth / 2;
+            var newy = y - this.context.touchStartEvent.target.offsetHeight / 2;
+            this.context.touchStartEvent.target.style.left = newx + "px";
+            this.context.touchStartEvent.target.style.top = newy + "px";
         }
-        if(event.type == "touchend"){
+        if (event.type == "touchend") {
             this.context.settouchStartEvent(null);
             this.context.setState(this.context.idleState);
         }
-        if(event.type == "keydown"){
-            if(event.key=="Escape"){
+        if (event.type == "keydown") {
+            if (event.key == "Escape") {
                 this.context.touchStartEvent.target.style.left = this.resumeLeft;
                 this.context.touchStartEvent.target.style.top = this.resumeTop;
                 this.context.setState(this.context.idleState);
@@ -209,8 +216,8 @@ class TouchMoveState extends State{
     }
 }
 
-class TouchFollowState extends State{
-    constructor(context){
+class TouchFollowState extends State {
+    constructor(context) {
         super(context);
         this.resumeLeft = null;
         this.resumeTop = null;
@@ -218,85 +225,130 @@ class TouchFollowState extends State{
         this.touchPeriod = 200;
     }
 
-    setResumeLeftandTop(left,top){
+    setResumeLeftandTop(left, top) {
         this.resumeLeft = left;
         this.resumeTop = top;
     }
 
-    doEvent(event){
-        if(event.touches.length >= 2){
+    doEvent(event) {
+        if (event.touches.length >= 2) {
             this.context.touchStartEvent.target.style.left = this.resumeLeft;
             this.context.touchStartEvent.target.style.top = this.resumeTop;
             this.context.setState(this.context.idleState);
         }
 
-        if(event.type == "touchmove"){
+        if (event.type == "touchmove") {
             var x = event.touches[0].clientX;
             var y = event.touches[0].clientY;
-            var newx = x - this.context.touchStartEvent.target.offsetWidth/2;
-            var newy = y - this.context.touchStartEvent.target.offsetHeight/2;
-            this.context.touchStartEvent.target.style.left = newx+"px";
-            this.context.touchStartEvent.target.style.top = newy+"px";
+            var newx = x - this.context.touchStartEvent.target.offsetWidth / 2;
+            var newy = y - this.context.touchStartEvent.target.offsetHeight / 2;
+            this.context.touchStartEvent.target.style.left = newx + "px";
+            this.context.touchStartEvent.target.style.top = newy + "px";
         }
 
-        if(event.type == "touchend"){
-            if(event.timeStamp - this.touchStartPeriousTime < this.touchPeriod){
+        if (event.type == "touchend") {
+            if (event.timeStamp - this.touchStartPeriousTime < this.touchPeriod) {
                 this.context.setState(this.context.idleState);
             }
-            else{
+            else {
                 console.log(event);
                 var x = event.changedTouches[0].clientX;
                 var y = event.changedTouches[0].clientY;
-                var newx = x - this.context.touchStartEvent.target.offsetWidth/2;
-                var newy = y - this.context.touchStartEvent.target.offsetHeight/2;
-                this.context.touchStartEvent.target.style.left = newx+"px";
-                this.context.touchStartEvent.target.style.top = newy+"px";
+                var newx = x - this.context.touchStartEvent.target.offsetWidth / 2;
+                var newy = y - this.context.touchStartEvent.target.offsetHeight / 2;
+                this.context.touchStartEvent.target.style.left = newx + "px";
+                this.context.touchStartEvent.target.style.top = newy + "px";
             }
         }
 
-        if(event.type == "touchstart"){
+        if (event.type == "touchstart") {
             this.touchStartPeriousTime = event.timeStamp;
 
         }
     }
 }
 
-class TouchHScaleState extends State{
-    constructor(context){
+class TouchHScaleState extends State {
+    constructor(context) {
         super(context);
         this.resumeWidth = null;
         this.touchWidth = null;
+        this.s = null;
     }
 
-    setWidth(w,ww){
+    setWidth(w, ww) {
         this.resumeWidth = w;
         this.touchWidth = ww;
     }
 
-    doEvent(event){
-        console.log("good!");
-        if(event.touches.length >= 3){
-            this.context.currentTarget.offsetWidth = this.resumeWidth;
+    doEvent(event) {
+        if (event.touches.length >= 3) {
+            this.context.currentTarget.style.transform = `scaleX(${this.context.scaleX}) scaleY(${this.context.scaleY})`;
             this.context.setState(this.context.idleState);
             return;
         }
-        if(event.type == "keydown"){
-            if(event.key=="Escape"){
-                this.context.currentTarget.offsetWidth = this.resumeWidth;
+        if (event.type == "keydown") {
+            if (event.key == "Escape") {
+                this.context.currentTarget.style.transform = `scaleX(${this.context.scaleX}) scaleY(${this.context.scaleY})`;
                 this.context.setState(this.context.idleState);
                 return;
             }
         }
-        if(event.touches.length == 2){
-            console.log("scale");
-            let d = Math.abs(event.touches[0].clientX-event.touches[1].clientX);
-            this.context.currentTarget.offsetWidth = this.resumeWidth + (d - this.touchWidth);
+        if (event.touches.length == 2) {
+            let d = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
+            this.s = d / this.resumeWidth;
+            this.context.currentTarget.style.transform = `scaleX(${this.s}) scaleY(${this.context.scaleY})`;
+        }
+        console.log(event.touches.length);
+        if (event.touches.length == 0) {
+            this.context.scaleX = this.s;
+            this.context.setState(this.context.idleState);
+        }
+    }
+}
+
+class TouchVScaleState extends State {
+    constructor(context) {
+        super(context);
+        this.resumeHeight = null;
+        this.touchHeight = null;
+        this.s = null;
+    }
+
+    setHeight(h, hh) {
+        this.resumeHeight = h;
+        this.touchHeight = hh;
+    }
+
+    doEvent(event) {
+        if (event.touches.length >= 3) {
+            this.context.currentTarget.style.transform = `scaleX(${this.context.scaleX}) scaleY(${this.context.scaleY})`;
+            this.context.setState(this.context.idleState);
+            return;
+        }
+        if (event.type == "keydown") {
+            if (event.key == "Escape") {
+                this.context.currentTarget.style.transform = `scaleX(${this.context.scaleX}) scaleY(${this.context.scaleY})`;
+                this.context.setState(this.context.idleState);
+                return;
+            }
+        }
+        if (event.touches.length == 2) {
+            let d = Math.abs(event.touches[0].clientY - event.touches[1].clientY);
+            this.s = d / this.resumeHeight;
+            this.context.currentTarget.style.transform = `scaleX(${this.context.scaleX}) scaleY(${this.s})`;
+
+        }
+        console.log(event.touches.length);
+        if (event.touches.length == 0) {
+            this.context.scaleY = this.s;
+            this.context.setState(this.context.idleState);
         }
     }
 }
 
 
-class Context{
+class Context {
     constructor() {
         this.idleState = new IdleState(this);
         this.mouseDownState = new MouseDownState(this);
@@ -307,36 +359,39 @@ class Context{
         this.clickIdleState = new ClickIdleState(this);
         this.touchFollowState = new TouchFollowState(this);
         this.touchHScaleState = new TouchHScaleState(this);
+        this.touchVScaleState = new TouchVScaleState(this);
         this.currentState = this.idleState;
         this.currentTarget = null;
         this.mouseDownEvent = null;
         this.touchStartEvent = null;
         this.touchPeriousTime = -6000;
         this.touchPeriousTarget = null;
+        this.scaleX = 1;
+        this.scaleY = 1;
         this.touchPeriod = 500;
     }
-    doEvent(event){
+    doEvent(event) {
         this.currentState.doEvent(event);
     }
-    setState(state){
+    setState(state) {
         this.currentState = state;
     }
-    setmouseDownEvent(event){
+    setmouseDownEvent(event) {
         this.mouseDownEvent = event;
     }
-    settouchStartEvent(event){
+    settouchStartEvent(event) {
         this.touchStartEvent = event;
     }
-    setTarget(target){
-        if(this.currentTarget!=null){
+    setTarget(target) {
+        if (this.currentTarget != null) {
             this.currentTarget.style.backgroundColor = "red";
         }
-        if(target!=null){
+        if (target != null) {
             target.style.backgroundColor = "blue";
         }
         this.currentTarget = target;
     }
-    setPeriousTouch(time,target){
+    setPeriousTouch(time, target) {
         this.touchPeriousTarget = target;
         this.touchPeriousTime = time;
     }
