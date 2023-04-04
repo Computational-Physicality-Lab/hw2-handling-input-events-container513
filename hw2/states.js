@@ -281,6 +281,7 @@ class TouchHScaleState extends State{
             }
         }
         if(event.touches.length == 2){
+            console.log("yes");
             let d = Math.abs(event.touches[0].clientX-event.touches[1].clientX);
             this.context.currentTarget.offsetWidth = this.resumeWidth + (d - this.touchWidth);
         }
