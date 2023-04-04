@@ -40,7 +40,7 @@ class IdleState extends State {
             this.context.setState(this.context.touchStartState);
         }
         if (event.type == "devicemotion") {
-            alert(event.acceleration.x);
+            alert("yes");
 
             let clone = document.createElement("div");
             clone.style.width = 100+"px";
