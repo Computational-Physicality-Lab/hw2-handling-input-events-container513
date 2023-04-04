@@ -121,6 +121,8 @@ class TouchStartState extends State{
     }
     doEvent(event){
         console.log("touchStart");
+        console.log(event.touches.length);
+        console.log(event.touches[1].timeStamp, event.touches[0].timeStamp);
         if(event.touches.length == 2 && Math.abs(event.touches[1].timeStamp - event.touches[0].timeStamp) < this.touchScalePeriod){
             if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) > 
             Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
@@ -129,6 +131,7 @@ class TouchStartState extends State{
                 this.context.setState(this.context.touchHScaleState);
             }
             else{
+                console.log("Vscale");
                 this.context.setState(this.context.touchVScaleState);
             }
             return;
