@@ -8,6 +8,8 @@ class State{
 class IdleState extends State{
     constructor(context){
         super(context);
+        this.touchStartPreviousTime = -1000;
+        this.touchPeriod = 200;
     }
 
     doEvent(event){
@@ -30,6 +32,13 @@ class IdleState extends State{
             this.context.setState(this.context.touchStartState);
         }
 
+        if(event.type == "touchstart" && event.target.id == "workspace" && event.touches.length == 1){
+            this.context.settouchStartEvent(null);
+            
+            this.touchStartPreviousTime = event.timeStamp;
+            console.log(this.touchStartPreviousTime);
+            this.context.setState(this.context.touchStartState);
+        }
     }
 }
 class MouseDownState extends State{
@@ -107,16 +116,27 @@ class MouseDblclickState extends State{
 class TouchStartState extends State{
     constructor(context){
         super(context);
+        this.touchStartPreviousTime = -1000;
     }
     doEvent(event){
         if(event.touches.length >= 2){
             this.context.setState(this.context.idleState);
+        }
+        if(this.context.touchStartEvent==null){
+            if(event.type == "touchend" &&
+            event.timeStamp - this.context.idleState.touchStartPreviousTime <= this.context.idleState.touchPeriod
+                && event.target.id == "workspace"){
+                    this.context.setTarget(null);
+                }
+            this.context.setState(this.context.idleState);
+            return;
         }
         if(event.type == "touchend"){
             this.context.setTarget(this.context.touchStartEvent.target);
             if(event.timeStamp - this.context.touchPeriousTime <= this.context.touchPeriod
                 && event.target == this.context.touchPeriousTarget){
                 this.context.touchFollowState.setResumeLeftandTop(this.context.touchStartEvent.target.style.left,this.context.touchStartEvent.target.style.top);
+                console.log(this.context.touchStartEvent.target.style.left,this.context.touchStartEvent.target.style.top);
                 this.context.setState(this.context.touchFollowState);
             }
             else{
@@ -124,12 +144,12 @@ class TouchStartState extends State{
                 this.context.setPeriousTouch(event.timeStamp, event.target);
                 this.context.setState(this.context.idleState);
             }
-            console.log(event.timeStamp);
         }
         if(event.type == "touchmove"){
             this.context.touchMoveState.setResumeLeftandTop(event.touches[0].target.style.left,event.touches[0].target.style.top);
             this.context.setState(this.context.touchMoveState);
         }
+         
     }
 }
 
@@ -194,20 +214,33 @@ class TouchFollowState extends State{
             this.context.setState(this.context.idleState);
         }
 
-        if(event.type == "touchstart" || event.type == "touchmove"){
+        if(event.type == "touchmove"){
             var x = event.touches[0].clientX;
             var y = event.touches[0].clientY;
             var newx = x - this.context.touchStartEvent.target.offsetWidth/2;
             var newy = y - this.context.touchStartEvent.target.offsetHeight/2;
             this.context.touchStartEvent.target.style.left = newx+"px";
             this.context.touchStartEvent.target.style.top = newy+"px";
-            if(event.type == "touchstart"){
-                this.touchStartPeriousTime = event.timeStamp;
+        }
+
+        if(event.type == "touchend"){
+            if(event.timeStamp - this.touchStartPeriousTime < this.touchPeriod){
+                this.context.setState(this.context.idleState);
+            }
+            else{
+                console.log(event);
+                var x = event.changedTouches[0].clientX;
+                var y = event.changedTouches[0].clientY;
+                var newx = x - this.context.touchStartEvent.target.offsetWidth/2;
+                var newy = y - this.context.touchStartEvent.target.offsetHeight/2;
+                this.context.touchStartEvent.target.style.left = newx+"px";
+                this.context.touchStartEvent.target.style.top = newy+"px";
             }
         }
 
-        if(event.type == "touchend" && event.timeStamp - this.touchStartPeriousTime < this.touchPeriod){
-            this.context.setState(this.context.idleState);
+        if(event.type == "touchstart"){
+            this.touchStartPeriousTime = event.timeStamp;
+
         }
     }
 }
@@ -233,6 +266,7 @@ class Context{
     }
     doEvent(event){
         console.log(event.type);
+        console.log(this.currentState);
         this.currentState.doEvent(event);
     }
     setState(state){
