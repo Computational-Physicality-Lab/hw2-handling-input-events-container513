@@ -116,7 +116,7 @@ class TouchStartState extends State{
             this.context.setTarget(this.context.touchStartEvent.target);
             if(event.timeStamp - this.context.touchPeriousTime <= this.context.touchPeriod
                 && event.target == this.context.touchPeriousTarget){
-                this.context.touchFollowState.setResumeLeftandTop(event.target.style.left,event.target.style.top);
+                this.context.touchFollowState.setResumeLeftandTop(event.touches[0].target.style.left,event.touches[0].target.style.top);
                 this.context.setState(this.context.touchFollowState);
             }
             else{
