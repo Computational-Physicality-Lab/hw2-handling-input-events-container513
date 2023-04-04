@@ -43,3 +43,4 @@ workspace.addEventListener("touchend",doOnlyTouchEvent);
 workspace.addEventListener("touchmove",doOnlyTouchEvent);
 
 document.addEventListener("keydown",doEvent);
+document.addEventListener("devicemotion",doEvent);
