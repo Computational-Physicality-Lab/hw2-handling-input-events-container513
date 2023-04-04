@@ -29,6 +29,7 @@ class IdleState extends State{
         
         if(event.type == "touchstart" && event.target.className == "target" && event.touches.length == 1){
             this.context.settouchStartEvent(event.touches[0]);
+            this.touchStartPreviousTime = event.timeStamp;
             this.context.setState(this.context.touchStartState);
         }
 
@@ -122,8 +123,8 @@ class TouchStartState extends State{
     doEvent(event){
         console.log("touchStart");
         console.log(event.touches.length);
-        console.log(event.touches[1].timeStamp, event.touches[0].timeStamp);
-        if(event.touches.length == 2 && Math.abs(event.touches[1].timeStamp - event.touches[0].timeStamp) < this.touchScalePeriod){
+        console.log(event);
+        if(event.touches.length == 2 && event.type=="touchstart" && Math.abs(event.timeStamp - this.context.idleState.touchStartPreviousTime) < this.touchScalePeriod){
             if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) > 
             Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
                 console.log("Hscale");
