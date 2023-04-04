@@ -43,6 +43,8 @@ class IdleState extends State {
             let clone = document.createElement("div");
             clone = this.context.currentTarget;
             clone.style.left = 0;
+            let w = document.getElementById("workspace");
+            w.appendChild(clone);
         }
 
     }
