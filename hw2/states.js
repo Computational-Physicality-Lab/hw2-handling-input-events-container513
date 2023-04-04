@@ -39,7 +39,9 @@ class IdleState extends State {
             this.touchStartPreviousTime = event.timeStamp;
             this.context.setState(this.context.touchStartState);
         }
-        if (event.type == "devicemotion" && event.acceleration.x > 10) {
+        if (event.type == "devicemotion") {
+            alert(event.acceleration.x);
+
             let clone = document.createElement("div");
             clone.style.width = 100+"px";
             clone.style.height = 100+"px";
