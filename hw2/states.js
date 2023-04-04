@@ -39,18 +39,6 @@ class IdleState extends State {
             this.touchStartPreviousTime = event.timeStamp;
             this.context.setState(this.context.touchStartState);
         }
-        
-        if (event.type == "devicemotion") {
-            let clone = document.createElement("div");
-            clone.style.width = 100+"px";
-            clone.style.height = 100+"px";
-            clone.style.backgroundColor = 'pink';
-            
-            clone.style.left = 0;
-            clone.style.top = 0;
-            let w = document.getElementById("workspace");
-            w.appendChild(clone);
-        }
 
     }
 }
