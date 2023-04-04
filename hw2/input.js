@@ -14,6 +14,13 @@ let context = new Context();
 
 function doEvent(e){
     context.doEvent(e);
+    e.stopPropagation();
+}
+
+function doOnlyTouchEvent(e){
+    context.doEvent(e);
+    e.preventDefault();
+    e.stopPropagation();
 }
 
 for(let i=0;i<targets.length;i++){
@@ -22,15 +29,17 @@ for(let i=0;i<targets.length;i++){
     targets[i].addEventListener("mousemove",doEvent);
     targets[i].addEventListener("mouseup",doEvent);
     targets[i].addEventListener("dblclick",doEvent);
-    targets[i].addEventListener("touchstart",doEvent);
-    targets[i].addEventListener("touchend",doEvent);
-    targets[i].addEventListener("touchmove",doEvent);
+    targets[i].addEventListener("touchstart",doOnlyTouchEvent);
+    targets[i].addEventListener("touchend",doOnlyTouchEvent);
+    targets[i].addEventListener("touchmove",doOnlyTouchEvent);
 }
 workspace.addEventListener("click",doEvent);
 workspace.addEventListener("mousedown",doEvent);
 workspace.addEventListener("mousemove",doEvent);
 workspace.addEventListener("mouseup",doEvent);
 workspace.addEventListener("dblclick",doEvent);
-workspace.addEventListener("touchstart",doEvent);
-workspace.addEventListener("touchend",doEvent);
-workspace.addEventListener("touchmove",doEvent);
+workspace.addEventListener("touchstart",doOnlyTouchEvent);
+workspace.addEventListener("touchend",doOnlyTouchEvent);
+workspace.addEventListener("touchmove",doOnlyTouchEvent);
+
+document.addEventListener("keydown",doEvent);
