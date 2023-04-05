@@ -330,7 +330,7 @@ class TouchVScaleState extends State {
         }
         if (event.touches.length == 2) {
             let d = Math.abs(event.touches[0].clientY - event.touches[1].clientY);
-            this.s = (d / this.touchWidth) * this.context.scaleY;
+            this.s = (d / this.touchHeight) * this.context.scaleY;
             this.context.currentTarget.style.transform = `scaleX(${this.context.scaleX}) scaleY(${this.s})`;
 
         }
