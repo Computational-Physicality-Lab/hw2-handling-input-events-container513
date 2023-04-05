@@ -291,7 +291,7 @@ class TouchHScaleState extends State {
         }
         if (event.touches.length == 2) {
             let d = Math.abs(event.touches[0].clientX - event.touches[1].clientX);
-            this.s = d / this.resumeWidth;
+            this.s = (d / this.touchWidth) * this.context.scaleX;
             this.context.currentTarget.style.transform = `scaleX(${this.s}) scaleY(${this.context.scaleY})`;
         }
         console.log(event.touches.length);
@@ -330,7 +330,7 @@ class TouchVScaleState extends State {
         }
         if (event.touches.length == 2) {
             let d = Math.abs(event.touches[0].clientY - event.touches[1].clientY);
-            this.s = d / this.resumeHeight;
+            this.s = (d / this.touchWidth) * this.context.scaleY;
             this.context.currentTarget.style.transform = `scaleX(${this.context.scaleX}) scaleY(${this.s})`;
 
         }
@@ -384,6 +384,20 @@ class Context {
         }
         if (target != null) {
             target.style.backgroundColor = "blue";
+            const scaleString = target.style.transform;
+            const regex = /scaleX\((\d*\.?\d+)\)\s*scaleY\((\d*\.?\d+)\)/;
+            const matches = scaleString.match(regex);
+            if (matches) {
+                const scaleX = parseFloat(matches[1]);
+                const scaleY = parseFloat(matches[2]);
+                this.scaleX = scaleX;
+                this.scaleY = scaleY;
+            }
+            else{
+                this.scaleX = 1;
+                this.scaleY = 1;
+            }
+            
         }
         this.currentTarget = target;
     }
