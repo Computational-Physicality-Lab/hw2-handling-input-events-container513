@@ -5,7 +5,10 @@ This is the starter code of [2023-Programming User Interface Homework](https://h
 * 網站連結: https://musical-shortbread-4a9982.netlify.app/
 * 我的設計
 ![state machine](https://github.com/Computational-Physicality-Lab/hw2-handling-input-events-container513/blob/main/image.jpg)
-我使用了state pattern這個design pattern，流程大概就是input.js會hold一個context object，而context裡面會hold目前的state，如果trigger任何event，都是由目前hold的state來處理。而在處理完event後，可能會將目前的state轉移到其他的state。
-使用state pattern的好處就是可以將不同state要處理的邏輯分開，因為每個state對於同一個event都會有不同的行為。
+  * 我使用了state pattern這個design pattern，流程大概就是input.js會hold一個context object，而context裡面會hold目前的state，如果trigger任何event，都是由目前hold的state來處理。
+  * 而在處理完event後，可能會將目前的state轉移到其他的state。(根據上圖的state machine)
+  * 使用state pattern的好處就是可以將不同state要處理的邏輯分開，因為每個state對於同一個event都會有不同的行為。
+  * 在手指雙擊觸控螢幕後，該 div 應進入「跟隨手指模式」。該模式僅會在觸發點擊事件（click）時被中止，即 touchstart 跟 touchend 在同一個位置快速發生。而我最後用來中止的觸發事件，不會造成div的位移。
+
 * 加分項目: 我有實作垂直大小變化。
 * 無有趣之處
